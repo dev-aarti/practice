@@ -3,295 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Custom YT Controls - Final</title>
-    <style>
-      :root {
-        --yt-red: #ff0000;
-        --yt-dark-red: #cc0000;
-      }
-
-      body {
-        font-family: sans-serif;
-        background-color: #f0f0f0;
-      }
-
-      .main-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        padding: 40px 20px;
-        max-width: 1000px;
-        margin: 0 auto;
-      }
-
-      .yt-wrapper {
-        flex-grow: 1;
-        overflow: hidden;
-        position: relative;
-        background: #000;
-        border-radius: 12px;
-        max-width: 600px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      }
-
-      /* Fullscreen logic */
-      .yt-wrapper:fullscreen {
-        max-width: 100vw;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        border-radius: 0;
-      }
-
-      .yt-frame-container {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9 */
-        height: 0;
-        width: 100%;
-      }
-
-      .yt-frame-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
-
-      /* External Play/Pause Buttons */
-      .control-btn {
-        background: var(--yt-red);
-        color: white;
-        border: none;
-        width: 65px;
-        height: 65px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.2s, background 0.3s;
-        flex-shrink: 0;
-      }
-
-      .control-btn:hover {
-        background: var(--yt-dark-red);
-        transform: scale(1.1);
-      }
-
-      .control-btn:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
-
-      /* Progress Bar Area */
-      .progress-container {
-        position: absolute;
-        bottom: 12px;
-        left: 12px;
-        right: 150px; /* Space for time and fullscreen btn */
-        height: 6px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
-        cursor: pointer;
-        z-index: 10;
-      }
-
-      .progress-bar {
-        height: 100%;
-        background: var(--yt-red);
-        width: 0%;
-        border-radius: 4px;
-        /* SMOOTHING: 0.1s linear for fluid motion */
-        transition: width 0.1s linear;
-        box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
-      }
-
-      /* Overlay Info */
-      .time-display {
-        position: absolute;
-        bottom: 8px;
-        right: 48px;
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 4px 8px;
-        border-radius: 4px;
-        pointer-events: none;
-      }
-
-      /* High-Visibility Fullscreen Button */
-      #fullscreenBtn {
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: var(--yt-red); /* High visibility Red */
-        cursor: pointer;
-        font-size: 18px;
-        padding: 4px 6px;
-        border-radius: 4px;
-        z-index: 10;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      #fullscreenBtn:hover {
-        background: var(--yt-red);
-        color: white;
-        transform: scale(1.1);
-      }
-
-      .loading {
-        opacity: 0.6;
-        filter: grayscale(1);
-      }
-
-      @media screen and (max-width: 600px) {
-        .control-btn {
-          width: 50px;
-          height: 50px;
-          font-size: 18px;
-        }
-        .progress-container {
-          right: 130px;
-        }
-      }
-    </style>
+    <title>food wastage</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet"> -->
   </head>
+
   <body>
-    <div class="main-container">
-      <button class="control-btn" id="playBtn" title="Play" disabled>▶</button>
+    <main>
+      <div class="container">
+        <nav>
+          <h1>Jal pooja</h1>
+          <div class="translate-button-container">
+            <div class="translate-button" id="englishButton">E</div>
+            <div class="translate-button" id="hindiButton">H</div>
+            <div class="translate-button" id="gujaratiButton">G</div>
+          </div>
+        </nav>
+        <div class="video-container">
+          <div class="yt-wrapper loading" id="ytWrapper">
+            <div class="yt-frame-container">
+              <div id="ytPlayer"></div>
+            </div>
+          </div>
 
-      <div class="yt-wrapper loading" id="ytWrapper">
-        <div class="yt-frame-container">
-          <div id="ytPlayer"></div>
+          <div class="controls-row">
+            <button class="control-btn" id="mainToggleBtn" title="Play/Pause">
+              ▶
+            </button>
+
+            <div class="volume-container">
+              <span id="volIcon">🔊</span>
+              <input
+                type="range"
+                id="volumeSlider"
+                min="0"
+                max="100"
+                value="100"
+              />
+            </div>
+
+            <div class="progress-wrapper" id="progressContainer">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+            <button id="fullscreenBtn" title="Toggle Fullscreen">⛶</button>
+          </div>
         </div>
-
-        <div class="progress-container" id="progressContainer">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
-
-        <button id="fullscreenBtn" title="Toggle Fullscreen">⛶</button>
       </div>
+    </main>
+    <!-- test -->
 
-      <button class="control-btn" id="pauseBtn" title="Pause" disabled>
-        ⏸
-      </button>
-    </div>
-
-    <script>
-      let player;
-      const playBtn = document.getElementById("playBtn");
-      const pauseBtn = document.getElementById("pauseBtn");
-      const wrapper = document.getElementById("ytWrapper");
-      const progressBar = document.getElementById("progressBar");
-      const progressContainer = document.getElementById("progressContainer");
-      const timeDisplay = document.getElementById("timeDisplay");
-      const fullscreenBtn = document.getElementById("fullscreenBtn");
-
-      // 1. Load the YouTube IFrame Player API code asynchronously.
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 2. Function creates an <iframe> (and YouTube player) after API downloads.
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player("ytPlayer", {
-          height: "100%",
-          width: "100%",
-          videoId: "182JTFErO_o",
-          playerVars: {
-            autoplay: 1,
-            mute: 0,
-            controls: 0, // Hide native controls
-            modestbranding: 1,
-            rel: 0,
-            playsinline: 1,
-          },
-          events: {
-            onReady: onPlayerReady,
-          },
-        });
-      }
-
-      // 3. When player is ready, enable custom buttons
-      function onPlayerReady(event) {
-        playBtn.disabled = false;
-        pauseBtn.disabled = false;
-        wrapper.classList.remove("loading");
-
-        // Update the bar every 100ms for smoothness
-        setInterval(updateProgress, 100);
-      }
-
-      function updateProgress() {
-        if (player && player.getCurrentTime) {
-          const current = player.getCurrentTime();
-          const total = player.getDuration();
-
-          if (total > 0) {
-            const pct = (current / total) * 100;
-            progressBar.style.width = pct + "%";
-
-            const format = (s) => {
-              const m = Math.floor(s / 60);
-              const sec = Math.floor(s % 60);
-              return `${m}:${sec < 10 ? "0" : ""}${sec}`;
-            };
-            timeDisplay.textContent = `${format(current)} / ${format(total)}`;
-          }
-        }
-      }
-
-      // Play/Pause listeners
-      playBtn.addEventListener("click", () => player.playVideo());
-      pauseBtn.addEventListener("click", () => player.pauseVideo());
-
-      // Seek logic (Click on progress bar)
-      progressContainer.addEventListener("click", (e) => {
-        const rect = progressContainer.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-
-        // Disable transition for instant "snap" to clicked location
-        progressBar.style.transition = "none";
-        player.seekTo(pos * player.getDuration());
-
-        // Re-enable smooth transition
-        setTimeout(() => {
-          progressBar.style.transition = "width 0.1s linear";
-        }, 50);
-      });
-
-      // Fullscreen logic
-      fullscreenBtn.addEventListener("click", () => {
-        if (!document.fullscreenElement) {
-          // Request fullscreen on the WRAPPER (so our UI stays on top)
-          wrapper.requestFullscreen().catch((err) => {
-            alert(`Fullscreen failed: ${err.message}`);
-          });
-        } else {
-          document.exitFullscreen();
-        }
-      });
-
-      // Handle Fullscreen Exit (Escape Key etc.)
-      document.addEventListener("fullscreenchange", () => {
-        if (!document.fullscreenElement) {
-          // You can add logic here if you want to change styles on exit
-        }
-      });
-    </script>
+    <script src="script.js"></script>
+    <script src="djp.js"></script>
   </body>
 </html>
