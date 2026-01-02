@@ -8,6 +8,7 @@ const fullscreenBtn = document.getElementById("fullscreenBtn");
 const volumeSlider = document.getElementById("volumeSlider");
 const volIcon = document.getElementById("volIcon");
 
+// Load YouTube API
 const tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
 const firstScriptTag = document.getElementsByTagName("script")[0];
@@ -19,7 +20,7 @@ function onYouTubeIframeAPIReady() {
     width: "100%",
     videoId: "182JTFErO_o",
     playerVars: {
-      autoplay: 1, // Start automatically since thumbnail is gone
+      autoplay: 1,
       controls: 0,
       modestbranding: 1,
       rel: 0,
@@ -39,7 +40,6 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-  // Automatically sync the button icon
   if (event.data === YT.PlayerState.PLAYING) {
     toggleBtn.textContent = "⏸";
   } else {
@@ -64,31 +64,27 @@ function updateProgress() {
   }
 }
 
+// Play/Pause Toggle
 toggleBtn.addEventListener("click", () => {
   const state = player.getPlayerState();
-  if (state === YT.PlayerState.PLAYING) {
-    player.pauseVideo();
-  } else {
-    player.playVideo();
-  }
+  state === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
 });
 
+// Volume Control
 volumeSlider.addEventListener("input", (e) => {
   const val = e.target.value;
   player.setVolume(val);
   volIcon.textContent = val == 0 ? "🔇" : val < 50 ? "🔉" : "🔊";
 });
 
+// Seek Functionality
 progressContainer.addEventListener("click", (e) => {
   const rect = progressContainer.getBoundingClientRect();
   const pos = (e.clientX - rect.left) / rect.width;
-  progressBar.style.transition = "none";
   player.seekTo(pos * player.getDuration());
-  setTimeout(() => {
-    progressBar.style.transition = "width 0.1s linear";
-  }, 50);
 });
 
+// Fullscreen Toggle Logic
 fullscreenBtn.addEventListener("click", () => {
   if (!document.fullscreenElement) {
     wrapper.requestFullscreen().catch((err) => alert(err.message));
@@ -96,54 +92,44 @@ fullscreenBtn.addEventListener("click", () => {
     document.exitFullscreen();
   }
 });
-const englishButton = document.getElementById("englishButton");
-const hindiButton = document.getElementById("hindiButton");
-const gujaratiButton = document.getElementById("gujaratiButton");
 
-// 1. Set Initial Language
-updateText("English");
+// Update Fullscreen Button Icon
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) {
+    fullscreenBtn.textContent = "❐"; // Small screen icon
+    fullscreenBtn.title = "Exit Fullscreen";
+  } else {
+    fullscreenBtn.textContent = "⛶"; // Large screen icon
+    fullscreenBtn.title = "Enter Fullscreen";
+  }
+});
 
-// 2. Add Event Listeners
-englishButton.addEventListener("click", () => updateText("English"));
-hindiButton.addEventListener("click", () => updateText("Hindi"));
-gujaratiButton.addEventListener("click", () => updateText("Gujrati"));
+// --- Translation Logic ---
+const buttons = {
+  English: document.getElementById("englishButton"),
+  Hindi: document.getElementById("hindiButton"),
+  Gujrati: document.getElementById("gujaratiButton"),
+};
+
+Object.keys(buttons).forEach((lang) => {
+  buttons[lang].addEventListener("click", () => updateText(lang));
+});
 
 function updateText(language) {
-  // Use the correct path to your JSON file
+  const h1 = document.querySelector("nav h1");
+  // Fallback dictionary
+  const fallbacks = {
+    English: "Jal Pooja",
+    Hindi: "जल पूजा",
+    Gujrati: "જળ પૂજા",
+  };
+
   fetch("new1/json/data.json")
-    .then((response) => {
-      if (!response.ok) throw new Error("JSON file not found");
-      return response.json();
-    })
+    .then((res) => res.json())
     .then((data) => {
-      const langData = data[language];
-
-      if (langData) {
-        // Update Title (exists in your HTML)
-        const h1 = document.querySelector("nav h1");
-        if (h1) h1.textContent = langData.title;
-
-        // Update Problems/Solutions ONLY if they exist in your JSON and HTML
-        // This prevents errors if the card elements are missing
-        const problemEl = document.querySelector(".card h2");
-        if (problemEl && langData.problem) {
-          problemEl.textContent = langData.problem;
-        }
-
-        const solutionEl = document.querySelector(".card .card2 h2");
-        if (solutionEl && langData.solution) {
-          solutionEl.textContent = langData.solution;
-        }
-      }
+      if (data[language]) h1.textContent = data[language].title;
     })
-    .catch((error) => {
-      console.error("Translation Error:", error);
-      // Fallback if fetch fails (useful for local testing)
-      if (language === "Hindi")
-        document.querySelector("nav h1").textContent = "जल पूजा";
-      if (language === "Gujrati")
-        document.querySelector("nav h1").textContent = "જળ પૂજા";
-      if (language === "English")
-        document.querySelector("nav h1").textContent = "Water Worship";
+    .catch(() => {
+      h1.textContent = fallbacks[language];
     });
 }

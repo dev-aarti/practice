@@ -1,4 +1,4 @@
- * {
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -8,6 +8,7 @@
 html, body {
     width: 100%;
     height: 100%;
+    background-color: #f4f4f4;
 }
 
 main {
@@ -18,90 +19,70 @@ main {
     justify-content: center;
 }
 
+/* --- Nav & Container --- */
+.container {
+    width: 98%;
+    height: 95%;
+    border: 0.9vw solid rgb(139, 167, 180);
+    padding: 1vw 0vw;
+    background: white;
+}
+
 nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0vw 3vw;
     position: relative;
+    height: 10vh;
 }
 
 nav h1 {
     position: absolute;
-    top: 0vh;
     left: 50%;
     transform: translateX(-50%);
+    background-color: white;
+    border: 0.4vw solid #6584b9;
+    border-radius: 3vw;
+    padding: 0.5vw 3vw;
+    font-size: 2.5vw;
+    white-space: nowrap;
 }
 
-nav .translate-button-container {
+.translate-button-container {
     margin-left: auto;
-}
-
-nav .translate-button-container {
-    width: fit-content;
     display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 0.7vw;
     background-color: #6584b9;
     border-radius: 3vw;
-    padding: 0.6vw 0.7vw;
-    height: 2.9vw;
-    position: relative;
-  right: 3vw;
+    padding: 0.5vw;
 }
 
-.translate-button-container .translate-button {
+.translate-button {
     background-color: white;
     border: 0.2vw solid #6584b9;
     border-radius: 50%;
-    width: 2vw;
-    height: 2vw;
+    width: 2.5vw;
+    height: 2.5vw;
     display: grid;
     place-items: center;
     cursor: pointer;
     font-size: 1vw;
-}
-
-h1 {
-    background-color: white;
-    border: 0.4vw solid #6584b9;
-    border-radius: 3vw;
-    padding: 0.8vw 3vw;
-    font-size: 3vw;
-}
-
-.container {
-    width: 98%;
-    height: 95%;
-    border: 0.9vw solid rgb(139, 167, 180);
-    padding: 1vw 0vw;
+    transition: all 0.2s ease;
 }
 
 .translate-button:hover {
     background-color: #f0f0f0;
     transform: scale(1.1);
-    transition: all 0.2s ease;
 }
 
-/* Optional: Active state class */
-.translate-button.active {
-    background-color: var(--yt-red);
-    color: white;
-    border-color: white;
-}
-
-/* --- Video Section Styles --- */
+/* --- Video Section --- */
 .video-container {
-    width: 100vw;
-    max-width: 50vw; /* Limits size on large screens */
-    margin: 6vw auto; /* Centers the video */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 0 15px;
+    width: 100%;
+    max-width: 50vw;
+    margin: 2vw auto;
 }
-d
+
 .yt-wrapper {
     width: 100%;
     position: relative;
@@ -113,7 +94,7 @@ d
 
 .yt-frame-container {
     position: relative;
-    padding-bottom: 56.25%; /* Maintains 16:9 ratio */
+    padding-bottom: 56.25%; /* 16:9 */
     height: 0;
 }
 
@@ -121,17 +102,16 @@ d
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    pointer-events: none;
+    pointer-events: none; /* Prevents clicking internal YT controls */
 }
 
-/* --- Controls Styling --- */
+/* --- Controls --- */
 .controls-row {
     display: flex;
     align-items: center;
     gap: 12px;
     background: #2a2a2a;
-    padding: 1vw 2vh;
-    border-radius: 1.2vw;
+    padding: 10px 20px;
     color: white;
 }
 
@@ -139,11 +119,10 @@ d
     background: #ff0000;
     color: white;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     cursor: pointer;
-    flex-shrink: 0;
 }
 
 .progress-wrapper {
@@ -152,7 +131,6 @@ d
     background: rgba(255,255,255,0.2);
     border-radius: 10px;
     cursor: pointer;
-    position: relative;
 }
 
 .progress-bar {
@@ -160,7 +138,6 @@ d
     background: #ff0000;
     width: 0%;
     border-radius: 10px;
-    transition: width 0.1s linear;
 }
 
 .volume-container {
@@ -169,21 +146,29 @@ d
     gap: 8px;
 }
 
-#volumeSlider {
-    width: 60px;
-    accent-color: #ff0000;
+#volumeSlider { width: 60px; accent-color: #ff0000; }
+.time-display { font-size: 12px; min-width: 80px; }
+#fullscreenBtn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+/* --- Fullscreen Specific Styles --- */
+.yt-wrapper:fullscreen {
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.time-display {
-    font-size: 12px;
-    min-width: 70px;
-    white-space: nowrap;
+.yt-wrapper:fullscreen .controls-row {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    z-index: 2147483647; /* Ensures it stays on top */
 }
 
-#fullscreenBtn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
+.yt-wrapper:fullscreen .yt-frame-container {
+    width: 100%;
+    padding-bottom: 56.25%;
 }
