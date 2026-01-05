@@ -143,6 +143,12 @@ i {
     transform:translate(-50%,-50%);
 }
 
+.control-btn,
+#fullscreenBtn {
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
 .progress-wrapper {  
     width: 30vw;
     height: 1vh;
@@ -206,7 +212,7 @@ i {
   background: #ffffff;
 }
 
-.time-display { font-size: 1vw; min-width: 10vh; }
+.time-display { font-size: 1vw; min-width: 5vw; }
 #fullscreenBtn { background: none; border: none; color: white; cursor: pointer; }
 
 /* --- Fullscreen Specific Styles --- */
