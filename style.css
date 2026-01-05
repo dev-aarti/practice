@@ -87,7 +87,7 @@ nav h1 {
     width: 100%;
     position: relative;
     background: #000;
-    border-radius: 12px;
+    border-radius: 2vh;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
@@ -108,28 +108,46 @@ nav h1 {
 /* --- Controls --- */
 .controls-row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 1.5vw;
     background: #2a2a2a;
-    padding: 10px 20px;
+    padding: 1.4vh 1.5vw;
     color: white;
+    height: 8vh;
 }
 
+
+i {
+    font-size: 1.5vw;      /* Adjust this to make the icon bigger or smaller */
+}
+
+#volIcon{
+    width: 1vw;
+    padding-right: 0.3vw;
+}
 .control-btn {
     background: #ff0000;
     color: white;
     border: none;
-    width: 35px;
-    height: 35px;
+    width: 3vw;
+    height: 5vh;
     border-radius: 50%;
     cursor: pointer;
+    position: relative;
+}
+.pause-btn{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
 }
 
-.progress-wrapper {
-    flex-grow: 1;
-    height: 6px;
+.progress-wrapper {  
+    width: 30vw;
+    height: 1vh;
     background: rgba(255,255,255,0.2);
-    border-radius: 10px;
+    border-radius: 0.5vh;
     cursor: pointer;
 }
 
@@ -137,18 +155,59 @@ nav h1 {
     height: 100%;
     background: #ff0000;
     width: 0%;
-    border-radius: 10px;
+    border-radius: 0.5vh;
 }
 
 .volume-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 2vw;
 }
 
-#volumeSlider { width: 60px; accent-color: #ff0000; }
-.time-display { font-size: 12px; min-width: 80px; }
-#fullscreenBtn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+#volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 5vw;
+  height: 1vh;
+  border-radius: 0.5vw;
+  cursor: pointer;
+  outline: none;
+
+  /* Will be updated by JS */
+  background: linear-gradient(to right, #ff0000 0%, #ff0000 50%, #ff0000  50%, #ff0000 100%);
+}
+
+/* Chrome/Edge/Safari thumb */
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.2vw;     /* circle size */
+  height: 1.2vw;
+  background: #ff0000;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* Firefox thumb */
+#volumeSlider::-moz-range-thumb {
+  width: 1.2vw;
+  height: 1.2vw;
+  background: #ff0000;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* Firefox track */
+#volumeSlider::-moz-range-track {
+  height: 1vh;
+  border-radius: 0.5vw;
+  background: #ffffff;
+}
+
+.time-display { font-size: 1vw; min-width: 10vh; }
+#fullscreenBtn { background: none; border: none; color: white; cursor: pointer; }
 
 /* --- Fullscreen Specific Styles --- */
 .yt-wrapper:fullscreen {
@@ -159,16 +218,20 @@ nav h1 {
 }
 
 .yt-wrapper:fullscreen .controls-row {
+    display: flex;
+    justify-content: center;
+    width: 100vw!important;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 20px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    background: linear-gradient( rgba(0,0,0,0.8));
     z-index: 2147483647; /* Ensures it stays on top */
 }
 
+
 .yt-wrapper:fullscreen .yt-frame-container {
-    width: 100%;
+    width: 100vh;
     padding-bottom: 56.25%;
 }

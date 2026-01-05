@@ -41,9 +41,11 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
-    toggleBtn.textContent = "⏸";
+    // Sets the Font Awesome Pause icon
+    toggleBtn.innerHTML = '<i class="bi bi-pause"></i>';
   } else {
-    toggleBtn.textContent = "▶";
+    // Sets the Font Awesome Play icon
+    toggleBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
   }
 }
 
@@ -70,11 +72,35 @@ toggleBtn.addEventListener("click", () => {
   state === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
 });
 
+function updateVolumeSliderFill(slider) {
+  const min = Number(slider.min || 0);
+  const max = Number(slider.max || 100);
+  const val = Number(slider.value);
+  const pct = ((val - min) / (max - min)) * 100;
+
+  slider.style.background = `linear-gradient(
+    to right,
+    #ff0000 0%,
+    #ff0000 ${pct}%,
+    #ffffff ${pct}%,
+    #ffffff 100%
+  )`;
+}
+
 // Volume Control
 volumeSlider.addEventListener("input", (e) => {
-  const val = e.target.value;
+  const val = Number(e.target.value);
   player.setVolume(val);
-  volIcon.textContent = val == 0 ? "🔇" : val < 50 ? "🔉" : "🔊";
+
+  updateVolumeSliderFill(e.target);
+
+  volIcon.className = `bi ${
+    val === 0
+      ? "bi-volume-mute-fill"
+      : val < 50
+      ? "bi-volume-down-fill"
+      : "bi-volume-up-fill"
+  }`;
 });
 
 // Seek Functionality
@@ -94,12 +120,14 @@ fullscreenBtn.addEventListener("click", () => {
 });
 
 // Update Fullscreen Button Icon
+const fullscreenIcon = document.getElementById("fullscreenIcon");
+
 document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
-    fullscreenBtn.textContent = "❐"; // Small screen icon
+    fullscreenIcon.className = "bi bi-fullscreen-exit";
     fullscreenBtn.title = "Exit Fullscreen";
   } else {
-    fullscreenBtn.textContent = "⛶"; // Large screen icon
+    fullscreenIcon.className = "bi bi-fullscreen";
     fullscreenBtn.title = "Enter Fullscreen";
   }
 });
