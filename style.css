@@ -27,7 +27,7 @@ main {
     border: 0.9vw solid rgb(139, 167, 180);
     padding: 1vw 0vw;
     background: white;
-    overflow-y:scroll;
+    overflow:scroll;
 }
 
 nav {
@@ -277,6 +277,9 @@ i {
 
 @media screen and (max-width: 1024px) {
 
+    .container {
+    overflow:scroll;
+}
     nav h1 {
         font-size: 3.5vw;
         padding: 1vw 4vw;
