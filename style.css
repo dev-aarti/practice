@@ -80,6 +80,8 @@ nav h1 {
 .video-container {
     width: 100%;
     max-width: 50vw;
+    height: 50vh;
+    max-height:45vh;
     margin: 2vw auto;
 }
 
@@ -105,6 +107,58 @@ nav h1 {
     pointer-events: none; /* Prevents clicking internal YT controls */
 }
 
+.yt-frame-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    cursor: pointer; 
+}
+.yt-frame-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: transparent;
+}
+/* --- Fullscreen Specific Styles --- */
+.yt-wrapper:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    z-index: 2147483647;
+}
+.yt-wrapper:fullscreen .yt-frame-container {
+    flex: 1;              
+    width: 100%;
+    height: auto;         
+    position: relative;
+    padding-bottom: 0;    
+    display: flex;
+}
+.yt-wrapper:fullscreen .yt-frame-container iframe {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+}
+
+.yt-wrapper:fullscreen .controls-row {
+    flex-shrink: 0;       
+    width: 100%;
+    padding: 20px;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    gap: 20px;
+}
+
 /* --- Controls --- */
 .controls-row {
     display: flex;
@@ -119,7 +173,7 @@ nav h1 {
 
 
 i {
-    font-size: 1.5vw;      /* Adjust this to make the icon bigger or smaller */
+    font-size: 1.5vw;      
 }
 
 #volIcon{
@@ -215,29 +269,184 @@ i {
 .time-display { font-size: 1vw; min-width: 5vw; }
 #fullscreenBtn { background: none; border: none; color: white; cursor: pointer; }
 
-/* --- Fullscreen Specific Styles --- */
-.yt-wrapper:fullscreen {
-    border-radius: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+
+
+/* --- Responsive Media Queries --- */
+
+@media screen and (max-width: 1024px) {
+
+    nav h1 {
+        font-size: 3.5vw;
+        padding: 1vw 4vw;
+    }
+     .video-container {
+        max-width: 75vw;  
+        height: auto;     
+        max-height: 55vh;  
+        margin: 4vw auto;  
+    }
+
+    .controls-row {
+        height: auto;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .volume-container {
+        gap: 25px;
+    }
+    .progress-wrapper {
+        width: 40vw; 
+    }
+
+    i {
+        font-size: 20px;
+    }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    #volumeSlider {
+        width: 80px;
+    }
+
+    .time-display {
+        font-size: 14px;
+    }
 }
 
-.yt-wrapper:fullscreen .controls-row {
-    display: flex;
-    justify-content: center;
-    width: 100vw!important;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient( rgba(0,0,0,0.8));
-    z-index: 2147483647; /* Ensures it stays on top */
+
+@media screen and (max-height: 650px) and (min-width: 1024px) {
+
+    nav {
+        margin-bottom: 25px;
+    }
+
+    nav h1 {
+        font-size: 2vw;
+    }
+
+    .video-container {
+        max-width: 45vw; 
+        max-height: 50vh; 
+        margin: 0.5vw auto;
+    }
+
+    .controls-row {
+        height: 7vh; 
+        padding: 0.5vh 1.5vw;
+        gap: 1vw;
+    }
+
+    .control-btn {
+        height: 25px; 
+        width: 25px;
+    }
+    #volumeSlider {
+        width: 50px;
+    }
+    .progress-wrapper {
+        width: 25vw;
+    }
+    i{
+        font-size: 12px;
+    }
+     .volume-container {
+        gap: 10px;
+    }
+    .time-display{
+        font-size: 12px;
+        word-break: keep-all;
+        width: 7vw;
+    }
 }
 
+@media screen and (max-width: 768px) {
+    .container {
+        border-width: 1.5vw;
+        height: auto;
+        min-height: 90%;
+        padding-bottom: 5vh;
+    }
 
-.yt-wrapper:fullscreen .yt-frame-container {
-    width: 100vh;
-    padding-bottom: 56.25%;
+    nav {
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    nav h1 {
+        position: static;
+        transform: none;
+        font-size: 24px;
+        order: 1;
+    }
+
+    .translate-button-container {
+        margin: 0 auto;
+        order: 2;
+        padding: 8px;
+        border-radius: 50px;
+    }
+
+    .translate-button {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .video-container {
+        max-width: 85vw;
+    }
+        #volumeSlider {
+        width: 60px;
+    }
+   
+}
+
+@media screen and (max-width: 480px) {
+    nav h1 {
+        font-size: 20px;
+    }
+
+    .controls-row {
+        height: auto;
+        flex-wrap: wrap; 
+        justify-content: center;
+        padding: 15px;
+    }
+        .control-btn {
+        width: 35px;
+        height: 35px;
+    }
+    .progress-wrapper {
+        width: 80vw; 
+        order: -1;   
+    }
+
+    .volume-container {
+        gap: 20px;
+    }
+     i {
+        font-size: 15px;
+    }
+
+}
+
+/*  Orientation Check for Landscape Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .container {
+        height: 100%;
+        overflow-y: auto;
+    }
+    .video-container {
+        max-width: 60vw;
+        margin: 10px auto;
+    }
+    nav {
+        padding: 5px;
+    }
 }

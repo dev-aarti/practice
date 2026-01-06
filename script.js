@@ -132,6 +132,20 @@ document.addEventListener("fullscreenchange", () => {
   }
 });
 
+// play and pause when clicking directly on the video area
+const ytFrameContainer = document.querySelector(".yt-frame-container");
+
+ytFrameContainer.addEventListener("click", () => {
+  if (player && player.getPlayerState) {
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  }
+});
+
 // --- Translation Logic ---
 const buttons = {
   English: document.getElementById("englishButton"),
