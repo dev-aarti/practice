@@ -26,7 +26,6 @@ main {
     border: 0.9vw solid rgb(139, 167, 180);
     padding: 1vw 0vw;
     background: white;
-    overflow: scroll;
 }
 
 nav {
