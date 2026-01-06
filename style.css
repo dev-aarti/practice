@@ -26,6 +26,7 @@ main {
     border: 0.9vw solid rgb(139, 167, 180);
     padding: 1vw 0vw;
     background: white;
+    overflow: scroll;
 }
 
 nav {
@@ -437,7 +438,10 @@ i {
 }
 
 /*  Orientation Check for Landscape Mobile */
-@media screen and (max-height: 500px) and (orientation: landscape) {
+@media screen and (max-height: 250px) and (orientation: landscape) {
+    body{
+        
+    }
     .container {
         height: 100%;
         overflow-y: auto;
@@ -447,6 +451,6 @@ i {
         margin: 10px auto;
     }
     nav {
-        padding: 5px;
+        padding: 30px 0;
     }
 }
