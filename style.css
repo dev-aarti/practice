@@ -445,6 +445,7 @@ i {
    .video-container {
         max-width: 40vw; 
         margin: 0.5vw auto;
+        height:auto;
     }
 
     nav {
