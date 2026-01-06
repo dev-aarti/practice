@@ -438,19 +438,41 @@ i {
 }
 
 /*  Orientation Check for Landscape Mobile */
-@media screen and (max-height: 250px) and (orientation: landscape) {
+@media screen and (max-height: 450px) and (orientation: landscape) {
     body{
         
     }
-    .container {
-        height: 100%;
-        overflow-y: auto;
+   .video-container {
+        max-width: 40vw; 
+        margin: 0.5vw auto;
     }
-    .video-container {
-        max-width: 60vw;
-        margin: 10px auto;
-    }
+
     nav {
-        padding: 30px 0;
+        padding: 30px 15px;
     }
+        nav h1 {
+        font-size: 20px;
+    }
+     .controls-row {
+        height: auto;
+        flex-wrap: wrap; 
+        justify-content: center;
+        padding-bottom: 8px;
+    }
+        .control-btn {
+        width: 35px;
+        height: 35px;
+    }
+    .progress-wrapper {
+        width: 80vw; 
+        order: -1;   ;
+    }
+
+    .volume-container {
+        gap: 15px;
+    }
+     i {
+        font-size: 15px;
+    }
+
 }
