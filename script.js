@@ -8,6 +8,11 @@ const fullscreenBtn = document.getElementById("fullscreenBtn");
 const volumeSlider = document.getElementById("volumeSlider");
 const volIcon = document.getElementById("volIcon");
 
+// Settings Elements
+// const settingsBtn = document.getElementById("settingsBtn");
+// const qualityMenu = document.getElementById("qualityMenu");
+// const qualityOptions = document.querySelectorAll(".quality-option");
+
 // Load YouTube API
 const tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
@@ -25,6 +30,7 @@ function onYouTubeIframeAPIReady() {
       modestbranding: 1,
       rel: 0,
       playsinline: 1,
+      origin: window.location.origin, // Add this line to fix the 'postMessage' error
     },
     events: {
       onReady: onPlayerReady,
@@ -33,7 +39,21 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
+let isPlayerReady = false;
+
+// function onPlayerReady(event) {
+//   isPlayerReady = true;
+//   wrapper.classList.remove("loading");
+//   setInterval(updateProgress, 100);
+//   player.setVolume(volumeSlider.value);
+//   console.log("YouTube Player is fully initialized.");
+// }
 function onPlayerReady(event) {
+  if (typeof event.target.setPlaybackQualityRange === "function") {
+    // Setting both min and max to 'hd720' forces the player to prefer HD
+    event.target.setPlaybackQualityRange("hd720", "hd720");
+  }
+  isPlayerReady = true;
   wrapper.classList.remove("loading");
   setInterval(updateProgress, 100);
   player.setVolume(volumeSlider.value);
@@ -41,10 +61,8 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
-    // Sets the Font Awesome Pause icon
     toggleBtn.innerHTML = '<i class="bi bi-pause"></i>';
   } else {
-    // Sets the Font Awesome Play icon
     toggleBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
   }
 }
@@ -80,8 +98,8 @@ function updateVolumeSliderFill(slider) {
 
   slider.style.background = `linear-gradient(
     to right,
-    #ff0000 0%,
-    #ff0000 ${pct}%,
+    #FF6B35 0%,
+    #e13202 ${pct}%,
     #ffffff ${pct}%,
     #ffffff 100%
   )`;
@@ -91,9 +109,7 @@ function updateVolumeSliderFill(slider) {
 volumeSlider.addEventListener("input", (e) => {
   const val = Number(e.target.value);
   player.setVolume(val);
-
   updateVolumeSliderFill(e.target);
-
   volIcon.className = `bi ${
     val === 0
       ? "bi-volume-mute-fill"
@@ -110,7 +126,7 @@ progressContainer.addEventListener("click", (e) => {
   player.seekTo(pos * player.getDuration());
 });
 
-// Fullscreen Toggle Logic
+// Fullscreen Logic
 fullscreenBtn.addEventListener("click", () => {
   if (!document.fullscreenElement) {
     wrapper.requestFullscreen().catch((err) => alert(err.message));
@@ -119,9 +135,7 @@ fullscreenBtn.addEventListener("click", () => {
   }
 });
 
-// Update Fullscreen Button Icon
 const fullscreenIcon = document.getElementById("fullscreenIcon");
-
 document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
     fullscreenIcon.className = "bi bi-fullscreen-exit";
@@ -132,17 +146,12 @@ document.addEventListener("fullscreenchange", () => {
   }
 });
 
-// play and pause when clicking directly on the video area
+// Click on video to Play/Pause
 const ytFrameContainer = document.querySelector(".yt-frame-container");
-
 ytFrameContainer.addEventListener("click", () => {
   if (player && player.getPlayerState) {
     const state = player.getPlayerState();
-    if (state === YT.PlayerState.PLAYING) {
-      player.pauseVideo();
-    } else {
-      player.playVideo();
-    }
+    state === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
   }
 });
 
@@ -154,12 +163,24 @@ const buttons = {
 };
 
 Object.keys(buttons).forEach((lang) => {
-  buttons[lang].addEventListener("click", () => updateText(lang));
+  buttons[lang].addEventListener("click", () => {
+    updateText(lang);
+    updateButtonStyles(lang);
+  });
 });
+
+function updateButtonStyles(selectedLang) {
+  Object.keys(buttons).forEach((lang) => {
+    if (lang === selectedLang) {
+      buttons[lang].classList.add("active-lang");
+    } else {
+      buttons[lang].classList.remove("active-lang");
+    }
+  });
+}
 
 function updateText(language) {
   const h1 = document.querySelector("nav h1");
-  // Fallback dictionary
   const fallbacks = {
     English: "Jal Pooja",
     Hindi: "जल पूजा",
@@ -175,3 +196,62 @@ function updateText(language) {
       h1.textContent = fallbacks[language];
     });
 }
+
+// Initial active state
+updateButtonStyles("English");
+
+// --- Quality Selection Menu Logic ---
+settingsBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  qualityMenu.classList.toggle("show");
+});
+
+document.addEventListener("click", () => {
+  qualityMenu.classList.remove("show");
+});
+
+// Handle Quality Selection
+// window.changeQuality = function (level, element) {
+//   // 1. Check if the player object exists and is ready
+//   if (player && isPlayerReady) {
+//     const qualityMap = {
+//       small: "small", // 240p
+//       medium: "medium", // 360p
+//       high: "hd720", // 720p
+//     };
+
+//     const targetQuality = qualityMap[level];
+
+// 2. Use setPlaybackQuality (more widely supported than Range)
+// We check if the function exists on the player object first
+//     if (typeof player.setPlaybackQuality === "function") {
+//       try {
+//         player.setPlaybackQuality(targetQuality);
+
+//         // 3. Force re-buffering so the change happens immediately
+//         const currentTime = player.getCurrentTime();
+//         player.seekTo(currentTime, true);
+
+//         // Update UI Visuals
+//         const allOptions = document.querySelectorAll(".quality-option");
+//         allOptions.forEach((opt) => (opt.style.color = "white"));
+//         element.style.color = "#FF6B35";
+
+//         console.log("Quality preference set to: " + targetQuality);
+//       } catch (err) {
+//         console.error("Manual quality change failed:", err);
+//       }
+//     } else {
+//       console.warn(
+//         "The YouTube API has restricted manual quality changes for this video."
+//       );
+//       alert("This video's quality is managed automatically by YouTube.");
+//     }
+//   } else {
+//     alert("Please wait for the video to load before changing quality.");
+//   }
+
+//   // Close the menu
+//   const qualityMenu = document.getElementById("qualityMenu");
+//   if (qualityMenu) qualityMenu.classList.remove("show");
+// };
