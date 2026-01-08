@@ -24,7 +24,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player("ytPlayer", {
     height: "100%",
     width: "100%",
-    videoId: "182JTFErO_o",
+    videoId: "TvFlFmyxt-4",
     playerVars: {
       autoplay: 1,
       controls: 0,
@@ -183,9 +183,9 @@ function updateButtonStyles(selectedLang) {
 function updateText(language) {
   const h1 = document.querySelector("nav h1");
   const fallbacks = {
-    English: "Jal Pooja",
-    Hindi: "जल पूजा",
-    Gujrati: "જળ પૂજા",
+    English: "Guruvandan Vidhi",
+    Hindi: "गुरुवंदन विधि",
+    Gujrati: "ગુરુવંદન વિધિ",
   };
 
   fetch("new1/json/data.json")
@@ -210,49 +210,3 @@ settingsBtn.addEventListener("click", (e) => {
 document.addEventListener("click", () => {
   qualityMenu.classList.remove("show");
 });
-
-// Handle Quality Selection
-// window.changeQuality = function (level, element) {
-//   // 1. Check if the player object exists and is ready
-//   if (player && isPlayerReady) {
-//     const qualityMap = {
-//       small: "small", // 240p
-//       medium: "medium", // 360p
-//       high: "hd720", // 720p
-//     };
-
-//     const targetQuality = qualityMap[level];
-
-// 2. Use setPlaybackQuality (more widely supported than Range)
-// We check if the function exists on the player object first
-//     if (typeof player.setPlaybackQuality === "function") {
-//       try {
-//         player.setPlaybackQuality(targetQuality);
-
-//         // 3. Force re-buffering so the change happens immediately
-//         const currentTime = player.getCurrentTime();
-//         player.seekTo(currentTime, true);
-
-//         // Update UI Visuals
-//         const allOptions = document.querySelectorAll(".quality-option");
-//         allOptions.forEach((opt) => (opt.style.color = "white"));
-//         element.style.color = "#FF6B35";
-
-//         console.log("Quality preference set to: " + targetQuality);
-//       } catch (err) {
-//         console.error("Manual quality change failed:", err);
-//       }
-//     } else {
-//       console.warn(
-//         "The YouTube API has restricted manual quality changes for this video."
-//       );
-//       alert("This video's quality is managed automatically by YouTube.");
-//     }
-//   } else {
-//     alert("Please wait for the video to load before changing quality.");
-//   }
-
-//   // Close the menu
-//   const qualityMenu = document.getElementById("qualityMenu");
-//   if (qualityMenu) qualityMenu.classList.remove("show");
-// };
